@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Pressable,
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +17,7 @@ import { changeTheme, ThemeState } from '@/Store/Theme'
 
 const HomeContainer = () => {
   const { t } = useTranslation()
-  const { Common, Fonts, Gutters, Layout } = useTheme()
+  const { Common, Fonts, Gutters, Layout, Colors } = useTheme()
   const dispatch = useDispatch()
 
   const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
@@ -25,24 +26,35 @@ const HomeContainer = () => {
   return (
     <ScrollView
       style={Layout.fill}
-      contentContainerStyle={[
-        Layout.fill,
-        Layout.colCenter,
-        Gutters.smallHPadding,
-      ]}
+      contentContainerStyle={[Layout.fill, Layout.colCenter]}
     >
-      <View style={[[Layout.colCenter, Gutters.smallHPadding]]}>
-        <Brand />
+      {/* Header section */}
+      <View style={[[Layout.colCenter, Gutters.largeVMargin]]}>
+        <View style={[Layout.rowCenter]}>
+          <View style={[Common.divider.regular]} />
+          <Text
+            style={[
+              Gutters.smallBMargin,
+              Gutters.smallHMargin,
+              Fonts.titleSmall,
+            ]}
+          >
+            TODO LISTS
+          </Text>
+          <View style={[Common.divider.regular]} />
+        </View>
+
+        <Brand width={60} height={60} />
       </View>
-      <View
-        style={[
-          Layout.row,
-          Layout.rowHCenter,
-          Gutters.smallHPadding,
-          Gutters.largeVMargin,
-          Common.backgroundPrimary,
-        ]}
-      />
+
+      {/* Add list button */}
+      <View style={[Gutters.largeHPadding, Layout.rowCenter]}>
+        <Pressable style={[Common.button.rounded]}>
+          <Text style={[Fonts.textRegular, { color: Colors.white }]}>
+            Add List
+          </Text>
+        </Pressable>
+      </View>
     </ScrollView>
   )
 }

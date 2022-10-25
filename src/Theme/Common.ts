@@ -5,11 +5,13 @@
  */
 import { StyleSheet } from 'react-native'
 import buttonStyles from './components/Buttons'
+import dividerStyles from './components/Divider'
 import { CommonParams } from './theme'
 
 export default function <C>({ Colors, ...args }: CommonParams<C>) {
   return {
     button: buttonStyles({ Colors, ...args }),
+    divider: dividerStyles({ Colors, ...args }),
     ...StyleSheet.create({
       backgroundPrimary: {
         backgroundColor: Colors.primary,
