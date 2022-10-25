@@ -14,11 +14,25 @@ import { Brand } from '@/Components'
 import { useTheme } from '@/Hooks'
 import { useLazyFetchOneQuery } from '@/Services/modules/users'
 import { changeTheme, ThemeState } from '@/Store/Theme'
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native'
+import { TabStackParamList } from '@/Navigators/Main'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RootStackParamList } from '@/Navigators/Application'
+
+export type HomeContainerNavigationProps = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, 'Home'>,
+  StackNavigationProp<RootStackParamList>
+>
 
 const HomeContainer = () => {
   const { t } = useTranslation()
   const { Common, Fonts, Gutters, Layout, Colors } = useTheme()
   const dispatch = useDispatch()
+  const navigation = useNavigation<HomeContainerNavigationProps>()
 
   const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
     useLazyFetchOneQuery()
@@ -26,7 +40,7 @@ const HomeContainer = () => {
   return (
     <ScrollView
       style={Layout.fill}
-      contentContainerStyle={[Layout.fill, Layout.colCenter]}
+      contentContainerStyle={[Layout.fill, Layout.colCenter, Common.backgroundWhite]}
     >
       {/* Header section */}
       <View style={[[Layout.colCenter, Gutters.largeVMargin]]}>
@@ -49,7 +63,10 @@ const HomeContainer = () => {
 
       {/* Add list button */}
       <View style={[Gutters.largeHPadding, Layout.rowCenter]}>
-        <Pressable style={[Common.button.rounded]}>
+        <Pressable
+          style={[Common.button.rounded]}
+          onPress={() => navigation.navigate('ListModal', { listId: '1' })}
+        >
           <Text style={[Fonts.textRegular, { color: Colors.white }]}>
             Add List
           </Text>

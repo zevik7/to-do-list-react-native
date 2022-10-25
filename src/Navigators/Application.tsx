@@ -6,8 +6,15 @@ import { StartupContainer } from '@/Containers'
 import { useTheme } from '@/Hooks'
 import MainNavigator from './Main'
 import { navigationRef } from './utils'
+import ListModal from '@/Containers/ListModal'
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<RootStackParamList>()
+
+export type RootStackParamList = {
+	Main: undefined;
+  Startup: undefined;
+	ListModal: { listId: string | undefined };
+};
 
 // @refresh reset
 const ApplicationNavigator = () => {
@@ -26,6 +33,10 @@ const ApplicationNavigator = () => {
             options={{
               animationEnabled: false,
             }}
+          />
+          <Stack.Screen
+            name="ListModal"
+            component={ListModal}
           />
         </Stack.Navigator>
       </NavigationContainer>
