@@ -13,7 +13,7 @@ const Stack = createStackNavigator<RootStackParamList>()
 export type RootStackParamList = {
 	Main: undefined;
   Startup: undefined;
-	ListModal: { listId: string | undefined };
+	ListModal: { listId: string };
 };
 
 // @refresh reset

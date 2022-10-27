@@ -23,15 +23,16 @@ export default function <C>({ Colors, ...args }: CommonParams<C>) {
         backgroundColor: Colors.transparent,
       },
       textInput: {
-        borderBottomWidth: 2,
-        borderColor: Colors.secondary,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.3)',
+        borderRadius: 5,
         backgroundColor: Colors.inputBackground,
         color: Colors.text,
-        minHeight: 50,
+        minHeight: 40,
         textAlign: 'center',
         marginTop: 10,
         marginBottom: 10,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
       },
     }),
   }

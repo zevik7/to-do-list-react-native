@@ -10,7 +10,7 @@ export default function <C>({ Colors, Gutters, Layout }: CommonParams<C>) {
   }
   const rounded = {
     ...base,
-    borderRadius: 20,
+    borderRadius: 5,
   }
 
   return StyleSheet.create({

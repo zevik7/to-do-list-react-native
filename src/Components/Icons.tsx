@@ -1,6 +1,6 @@
 import { DefaultVariables } from '@/Theme'
 import React from 'react'
-import { Svg, Path, Circle } from 'react-native-svg'
+import { Svg, Path, Circle, G } from 'react-native-svg'
 
 type IconProps = {
   color?: string
@@ -18,16 +18,39 @@ export const HomeIcon: React.FC<IconProps> = ({
   )
 }
 
-export const HistoryIcon: React.FC<IconProps> = ({
-  color = 'teal',
+export const ArchiveIcon: React.FC<IconProps> = ({
   size = 30,
+  color = 'teal',
 }) => {
   return (
-    <Svg width={size} height={size} fill={color} viewBox="0 0 60.123 60.123">
-      <Path d="M57.124 51.893H16.92a3 3 0 110-6h40.203a3 3 0 01.001 6zM57.124 33.062H16.92a3 3 0 110-6h40.203a3 3 0 01.001 6zM57.124 14.231H16.92a3 3 0 110-6h40.203a3 3 0 01.001 6z" />
-      <Circle cx={4.029} cy={11.463} r={4.029} />
-      <Circle cx={4.029} cy={30.062} r={4.029} />
-      <Circle cx={4.029} cy={48.661} r={4.029} />
+    <Svg
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 172 172"
+      fill={color}
+    >
+      <G
+        fill="none"
+        fill-rule="nonzero"
+        stroke="none"
+        stroke-width="1"
+        stroke-linecap="butt"
+        stroke-linejoin="miter"
+        stroke-miterlimit="10"
+        stroke-dasharray=""
+        stroke-dashoffset="0"
+        font-family="none"
+        font-weight="none"
+        font-size="none"
+        text-anchor="none"
+      >
+        <Path d="M0,172v-172h172v172z" fill="none"></Path>
+        <G fill="#1fb141">
+          <Path d="M21.5,21.5v129h64.5v-32.25v-64.5v-32.25zM86,53.75c0,17.7805 14.4695,32.25 32.25,32.25c17.7805,0 32.25,-14.4695 32.25,-32.25c0,-17.7805 -14.4695,-32.25 -32.25,-32.25c-17.7805,0 -32.25,14.4695 -32.25,32.25zM118.25,86c-17.7805,0 -32.25,14.4695 -32.25,32.25c0,17.7805 14.4695,32.25 32.25,32.25c17.7805,0 32.25,-14.4695 32.25,-32.25c0,-17.7805 -14.4695,-32.25 -32.25,-32.25z"></Path>
+        </G>
+      </G>
     </Svg>
   )
 }
@@ -59,6 +82,44 @@ export const CloseIcon: React.FC<IconProps> = ({
       fill={color}
     >
       <Path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"></Path>
+    </Svg>
+  )
+}
+
+export const RemoveIcon: React.FC<IconProps> = ({
+  size = 64,
+  color = 'teal',
+}) => {
+  return (
+    <Svg
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 172 172"
+      fill={color}
+    >
+      <G
+        fill="none"
+        fill-rule="nonzero"
+        stroke="none"
+        stroke-width="1"
+        stroke-linecap="butt"
+        stroke-linejoin="miter"
+        stroke-miterlimit="10"
+        stroke-dasharray=""
+        stroke-dashoffset="0"
+        font-family="none"
+        font-weight="none"
+        font-size="none"
+        text-anchor="none"
+        style="mix-blend-mode: normal"
+      >
+        <Path d="M0,172v-172h172v172z" fill="none"></Path>
+        <G fill="#1fb141">
+          <Path d="M21.5,21.5v129h64.5v-32.25v-64.5v-32.25zM86,53.75c0,17.7805 14.4695,32.25 32.25,32.25c17.7805,0 32.25,-14.4695 32.25,-32.25c0,-17.7805 -14.4695,-32.25 -32.25,-32.25c-17.7805,0 -32.25,14.4695 -32.25,32.25zM118.25,86c-17.7805,0 -32.25,14.4695 -32.25,32.25c0,17.7805 14.4695,32.25 32.25,32.25c17.7805,0 32.25,-14.4695 32.25,-32.25c0,-17.7805 -14.4695,-32.25 -32.25,-32.25z"></Path>
+        </G>
+      </G>
     </Svg>
   )
 }

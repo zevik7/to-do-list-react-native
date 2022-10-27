@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import {
   persistReducer,
@@ -14,9 +14,11 @@ import {
 
 import { api } from '@/Services/api'
 import theme from './Theme'
+import todoLists from './TodoList'
 
 const reducers = combineReducers({
   theme,
+  todoLists,
   api: api.reducer,
 })
 
@@ -51,3 +53,4 @@ const persistor = persistStore(store)
 setupListeners(store.dispatch)
 
 export { store, persistor }
+export type RootState = ReturnType<typeof store.getState>
