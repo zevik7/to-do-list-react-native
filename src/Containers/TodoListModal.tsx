@@ -1,14 +1,6 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  Pressable,
-  FlatList,
-} from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import { Icon } from '@rneui/themed'
-import React, { useEffect, useRef } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import {
   CompositeNavigationProp,
   RouteProp,
@@ -30,6 +22,8 @@ import {
   toggleTodo,
   Todo,
   TodoList,
+  updateTodoText,
+  removeList,
 } from '@/Store/TodoList'
 import { useSelector } from 'react-redux'
 import 'react-native-get-random-values'
@@ -39,21 +33,21 @@ import { RootState } from '@/Store'
 
 export type ModalScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
-  StackNavigationProp<RootStackParamList, 'ListModal'>
+  StackNavigationProp<RootStackParamList, 'TodoListModal'>
 >
 
-type ModalScreenRouteProp = RouteProp<RootStackParamList, 'ListModal'>
+type ModalScreenRouteProp = RouteProp<RootStackParamList, 'TodoListModal'>
 
-export default function ListModal() {
+export default function TodoListModal() {
   const {
-    params: { listId },
+    params: { todoListId },
   } = useRoute<ModalScreenRouteProp>()
   const navigation = useNavigation<ModalScreenNavigationProp>()
   const dispatch = useDispatch()
   const { Common, Colors, Fonts, Layout, Gutters } = useTheme()
   const todoList = useSelector((state: RootState) => {
     return state.todoLists.todoLists.find(
-      (todoList: TodoList) => todoList.id === listId,
+      (todoList: TodoList) => todoList.id === todoListId,
     )
   })
   const [todoText, setTodoText] = useState<string>('')
@@ -61,12 +55,12 @@ export default function ListModal() {
   const handleAddTodo = () => {
     dispatch(
       addTodo({
-        todoListId: listId,
+        todoListId: todoListId,
         todo: {
           id: uuidv4(),
           text: todoText,
-          status: 'Pending',
-        },
+          completed: false,
+        } as Todo,
       }),
     )
 
@@ -76,7 +70,7 @@ export default function ListModal() {
   const handleTodoItemToggle = (id: string) => {
     dispatch(
       toggleTodo({
-        todoListId: listId,
+        todoListId: todoListId,
         todoId: id,
       }),
     )
@@ -85,22 +79,41 @@ export default function ListModal() {
   const handleTodoItemDelete = (id: string) => {
     dispatch(
       deleteTodo({
-        todoListId: listId,
+        todoListId: todoListId,
         todoId: id,
       }),
     )
   }
 
-  const renderTodoItem = ({ item }: { item: Todo }) => (
-    <TodoItem
-      key={item.id}
-      checked={item.completed}
-      text={item.text}
-      onDelete={() => handleTodoItemDelete(item.id)}
-      onChange={() => {}}
-      onStatusToggle={() => handleTodoItemToggle(item.id)}
-    />
+  const handleTodoItemUpdate = (todoId: string, newText: string) => {
+    dispatch(updateTodoText({ todoListId, todoId, newText }))
+  }
+
+  const handleTodoListDelete = () => {
+    dispatch(removeList({ todoListId }))
+    navigation.goBack()
+  }
+
+  const renderTodoItem = useCallback(
+    ({ item }: { item: Todo }) => (
+      <TodoItem
+        key={item.id}
+        id={item.id}
+        completed={item.completed}
+        text={item.text}
+        onDelete={() => handleTodoItemDelete(item.id)}
+        onChange={(newText: string) => handleTodoItemUpdate(item.id, newText)}
+        onStatusToggle={() => handleTodoItemToggle(item.id)}
+      />
+    ),
+    [todoList],
   )
+
+  const totalCompletedTodos = useMemo(() => {
+    return todoList?.todos.reduce((prev, current) => {
+      return prev + (current.completed ? 1 : 0)
+    }, 0)
+  }, [todoList?.todos])
 
   return (
     <View
@@ -114,10 +127,14 @@ export default function ListModal() {
     >
       {/* Header */}
       <View style={[Layout.rowCenter, Layout.justifyContentBetween]}>
-        <TouchableOpacity onPress={navigation.goBack}>
+        <TouchableOpacity onPress={handleTodoListDelete}>
           <Icon name="trash" type="evilicon" color={Colors.error} size={40} />
         </TouchableOpacity>
-        <Text style={[Fonts.textSmall]}>1/4 Completed</Text>
+        {todoList?.todos.length ? (
+          <Text style={[Fonts.textSmall]}>
+            {totalCompletedTodos}/{todoList?.todos.length} Completed
+          </Text>
+        ) : null}
         <TouchableOpacity onPress={navigation.goBack}>
           <CloseIcon />
         </TouchableOpacity>

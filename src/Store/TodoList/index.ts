@@ -8,61 +8,35 @@ const slice = createSlice({
         id: '1',
         name: 'Todo list 1',
         status: 'active',
-        todos: [],
+        todos: [
+          {
+            id: '1',
+            text: 'doing something',
+            completed: false,
+          },
+          {
+            id: '2',
+            text: 'doing something 2',
+            completed: false,
+          },
+        ],
       },
       {
-        id: '12',
-        name: 'Todo list 1',
+        id: '2',
+        name: 'Todo list 2',
         status: 'active',
-        todos: [],
-      },
-      {
-        id: '1123',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '123451',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '341',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '51',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '13345',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '131345',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '113345',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
-      },
-      {
-        id: '132345',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [],
+        todos: [
+          {
+            id: '1',
+            text: 'doing something',
+            completed: false,
+          },
+          {
+            id: '2',
+            text: 'doing something 2',
+            completed: false,
+          },
+        ],
       },
     ],
   } as TodoListState,
@@ -71,66 +45,79 @@ const slice = createSlice({
       state.todoLists.push(todoList)
     },
     removeList: (state, { payload: { todoListId } }) => {
-      state.todoLists.filter(todoList => todoListId !== todoList.id)
+      state.todoLists = state.todoLists.filter(
+        todoList => todoListId !== todoList.id,
+      )
+    },
+    changeListStatus: (state, { payload: { todoListId, status } }) => {
+      for (let i = 0; i < state.todoLists.length; i++) {
+        if (todoListId === state.todoLists[i].id) {
+          state.todoLists[i].status = status
+          console.log(state.todoLists[i])
+          break
+        }
+      }
     },
     addTodo: (state, { payload: { todoListId, todo } }) => {
-      const newLists = state.todoLists.map(todoList =>
-        todoListId === todoList.id
-          ? {
-              id: todoListId,
-              name: todoList.name,
-              status: todoList.status,
-              todos: [...todoList.todos, todo],
+      for (let i = 0; i < state.todoLists.length; i++) {
+        if (todoListId === state.todoLists[i].id) {
+          state.todoLists[i].todos.push(todo)
+          break
+        }
+      }
+    },
+    updateTodoText: (state, { payload: { todoListId, todoId, newText } }) => {
+      for (let i = 0; i < state.todoLists.length; i++) {
+        if (todoListId === state.todoLists[i].id) {
+          for (let j = 0; j < state.todoLists[i].todos.length; j++) {
+            if (todoId === state.todoLists[i].todos[j].id) {
+              state.todoLists[i].todos[j].text = newText
+              break
             }
-          : todoList,
-      )
-
-      state.todoLists = newLists
+          }
+          break
+        }
+      }
     },
     deleteTodo: (state, { payload: { todoListId, todoId } }) => {
-      const newLists = state.todoLists.map(todoList =>
-        todoListId === todoList.id
-          ? {
-              id: todoListId,
-              name: todoList.name,
-              status: todoList.status,
-              todos: todoList.todos.filter(todo => todoId !== todo.id),
+      for (let i = 0; i < state.todoLists.length; i++) {
+        if (todoListId === state.todoLists[i].id) {
+          for (let j = 0; j < state.todoLists[i].todos.length; j++) {
+            if (todoId === state.todoLists[i].todos[j].id) {
+              state.todoLists[i].todos.splice(j, 1)
+              break
             }
-          : todoList,
-      )
-
-      state.todoLists = newLists
+          }
+          break
+        }
+      }
     },
     toggleTodo: (state, { payload: { todoListId, todoId } }) => {
-      const newLists = state.todoLists.map(todoList => {
-        if (todoListId === todoList.id) {
-          const newTodos = todoList.todos.map(todo => {
-            if (todo.id === todoId) {
-              return {
-                id: todo.id,
-                text: todo.text,
-                completed: !todo.completed,
-              }
+      for (let i = 0; i < state.todoLists.length; i++) {
+        if (todoListId === state.todoLists[i].id) {
+          for (let j = 0; j < state.todoLists[i].todos.length; j++) {
+            if (todoId === state.todoLists[i].todos[j].id) {
+              state.todoLists[i].todos[j].completed =
+                !state.todoLists[i].todos[j].completed
+              break
             }
-
-            return todo
-          })
-
-          return {
-            ...todoList,
-            todos: newTodos,
           }
+          break
         }
-
-        return todoList
-      })
-
-      state.todoLists = newLists
+      }
     },
   },
 })
 
-export const { addList, addTodo, deleteTodo, toggleTodo } = slice.actions
+export const {
+  addList,
+  changeListStatus,
+  removeList,
+  addTodo,
+  updateTodoText,
+  deleteTodo,
+  toggleTodo,
+} = slice.actions
 
 export default slice.reducer
 
@@ -151,13 +138,4 @@ export type TodoList = {
 
 export type TodoListState = {
   todoLists: TodoList[]
-}
-
-type ThemePayload = {
-  payload: {
-    todoId: string
-    todo: Todo
-    todoListId: string
-    todoList: TodoList
-  }
 }

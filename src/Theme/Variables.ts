@@ -19,6 +19,7 @@ export const Colors = {
   third: '#FEF5AC',
   success: '#28a745',
   error: '#dc3545',
+  disabled: '#ababab'
 }
 
 export const NavigationColors = {

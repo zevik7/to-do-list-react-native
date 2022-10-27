@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import { store, persistor } from '@/Store'
 import ApplicationNavigator from '@/Navigators/Application'
 import './Translations'
+import 'react-native-gesture-handler';
 
 const App = () => (
   <Provider store={store}>

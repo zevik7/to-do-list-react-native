@@ -6,14 +6,14 @@ import { StartupContainer } from '@/Containers'
 import { useTheme } from '@/Hooks'
 import MainNavigator from './Main'
 import { navigationRef } from './utils'
-import ListModal from '@/Containers/ListModal'
+import TodoListModal from '@/Containers/TodoListModal'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
 export type RootStackParamList = {
 	Main: undefined;
   Startup: undefined;
-	ListModal: { listId: string };
+	TodoListModal: { todoListId: string };
 };
 
 // @refresh reset
@@ -35,8 +35,8 @@ const ApplicationNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="ListModal"
-            component={ListModal}
+            name="TodoListModal"
+            component={TodoListModal}
           />
         </Stack.Navigator>
       </NavigationContainer>

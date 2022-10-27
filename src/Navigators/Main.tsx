@@ -2,9 +2,8 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { HomeContainer } from '@/Containers'
 import ArchiveContainer from '@/Containers/ArchiveContainer'
-import { ArchiveIcon, HistoryIcon, HomeIcon } from '@/Components/Icons'
+import { HomeIcon } from '@/Components/Icons'
 import { DefaultVariables } from '@/Theme'
-import { Route } from '@react-navigation/native'
 import { Icon } from '@rneui/themed'
 
 export type TabStackParamList = {

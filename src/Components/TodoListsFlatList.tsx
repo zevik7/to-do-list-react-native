@@ -4,21 +4,20 @@ import { useTheme } from '@/Hooks'
 import { useSelector } from 'react-redux'
 import { TodoList } from '@/Store/TodoList'
 import TodoListItem from '@/Components/TodoListItem'
+import { shallowEqual } from 'react-redux'
 
-const TodoListsFlatList = () => {
-  const todoLists: TodoList[] = useSelector(
-    (state: any) => state.todoLists.todoLists,
+const TodoListsFlatList = ({ onlyShowArchive = false }) => {
+  const todoLists: TodoList[] = useSelector((state: any) =>
+    state.todoLists.todoLists.filter(
+      (tl: TodoList) => tl.status === (onlyShowArchive ? 'archive' : 'active'),
+      shallowEqual
+    ),
   )
-  const { Common, Fonts, Gutters, Layout, Colors } = useTheme()
+  const { Gutters, Layout } = useTheme()
 
   const renderItem = useCallback(
     ({ item }: { item: TodoList }) => (
-      <TodoListItem
-        listId={item.id}
-        name={item.name}
-        totalTodosLength={item.todos.length}
-        totalcompletedTodos={1}
-      />
+      <TodoListItem id={item.id} name={item.name} todos={item.todos} />
     ),
     [todoLists],
   )

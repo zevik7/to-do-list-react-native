@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
-  ScrollView,
   Pressable,
   Modal,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Brand } from '@/Components'
 import { useTheme } from '@/Hooks'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
-import {
-  CompositeNavigationProp,
-  useNavigation,
-} from '@react-navigation/native'
+import { CompositeNavigationProp } from '@react-navigation/native'
 import { TabStackParamList } from '@/Navigators/Main'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '@/Navigators/Application'
-import { addList, TodoList } from '@/Store/TodoList'
+import { addList } from '@/Store/TodoList'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
-import TodoListsFlatList from '@/Components/TodoListsFlatList'
+import { TodoListsFlatList, Brand } from '@/Components'
 import { CloseIcon } from '@/Components/Icons'
 
 export type HomeContainerNavigationProps = CompositeNavigationProp<
@@ -48,6 +43,7 @@ const HomeContainer = () => {
         },
       }),
     )
+
     setListName('')
     setIsModalVisible(false)
   }
