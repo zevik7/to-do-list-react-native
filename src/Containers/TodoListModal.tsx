@@ -30,6 +30,7 @@ import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 import { TodoItem } from '@/Components'
 import { RootState } from '@/Store'
+import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
 
 export type ModalScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -67,47 +68,10 @@ export default function TodoListModal() {
     setTodoText('')
   }
 
-  const handleTodoItemToggle = (id: string) => {
-    dispatch(
-      toggleTodo({
-        todoListId: todoListId,
-        todoId: id,
-      }),
-    )
-  }
-
-  const handleTodoItemDelete = (id: string) => {
-    dispatch(
-      deleteTodo({
-        todoListId: todoListId,
-        todoId: id,
-      }),
-    )
-  }
-
-  const handleTodoItemUpdate = (todoId: string, newText: string) => {
-    dispatch(updateTodoText({ todoListId, todoId, newText }))
-  }
-
   const handleTodoListDelete = () => {
     dispatch(removeList({ todoListId }))
     navigation.goBack()
   }
-
-  const renderTodoItem = useCallback(
-    ({ item }: { item: Todo }) => (
-      <TodoItem
-        key={item.id}
-        id={item.id}
-        completed={item.completed}
-        text={item.text}
-        onDelete={() => handleTodoItemDelete(item.id)}
-        onChange={(newText: string) => handleTodoItemUpdate(item.id, newText)}
-        onStatusToggle={() => handleTodoItemToggle(item.id)}
-      />
-    ),
-    [todoList],
-  )
 
   const totalCompletedTodos = useMemo(() => {
     return todoList?.todos.reduce((prev, current) => {
@@ -149,12 +113,10 @@ export default function TodoListModal() {
         <View style={[Common.divider.regular]} />
       </View>
 
-      {/* Todo items */}
-      <FlatList
-        data={todoList?.todos}
-        renderItem={renderTodoItem}
-        style={[Layout.column, Gutters.regularVMargin]}
-      />
+      {/* Todo items list*/}
+      {todoList?.todos && (
+        <TodoItemsFlatList todoItems={todoList.todos} todoListId={todoListId} />
+      )}
 
       {/* Add todo input */}
       <View

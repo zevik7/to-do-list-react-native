@@ -53,7 +53,6 @@ const slice = createSlice({
       for (let i = 0; i < state.todoLists.length; i++) {
         if (todoListId === state.todoLists[i].id) {
           state.todoLists[i].status = status
-          console.log(state.todoLists[i])
           break
         }
       }

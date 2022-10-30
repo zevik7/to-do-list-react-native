@@ -43,7 +43,6 @@ const TodoListItem = ({ id, name, todos }: Props) => {
   const dispatch = useDispatch()
   const route = useRoute()
 
-  console.log(route.name)
 
   const totalCompletedTodos = useMemo(() => {
     return todos.reduce((prev, current) => {

@@ -10,32 +10,42 @@ import { useTheme } from '@/Hooks'
 import { CheckBox } from '@rneui/themed'
 import { Icon } from '@rneui/themed'
 import { useDispatch } from 'react-redux'
-import { updateTodoText } from '@/Store/TodoList'
+import { deleteTodo, toggleTodo, updateTodoText } from '@/Store/TodoList'
 
 type Props = {
   id: string
   completed: boolean
   text: string
-  onDelete: () => void
-  onChange: (newText : string) => void
-  onStatusToggle: () => void
+  todoListId: string
 }
 
 export default function TodoItem(props: Props) {
-  const {
-    id,
-    completed,
-    text,
-    onDelete,
-    onChange,
-    onStatusToggle,
-  } = props
-  const { Layout, Colors, Fonts, Common, Gutters, Variables } = useTheme()
+  const { id, completed, text, todoListId } = props
+  const { Layout, Colors, Fonts, Common, Gutters } = useTheme()
   const [currentText, setCurrentText] = useState<string>(text)
   const [editMode, setEditMode] = useState<boolean>(false)
+  const dispatch = useDispatch()
 
-  const handleUpdateText = () => {
-    onChange(currentText)
+  const handleToggle = () => {
+    dispatch(
+      toggleTodo({
+        todoListId,
+        todoId: id,
+      }),
+    )
+  }
+
+  const handleDelete = () => {
+    dispatch(
+      deleteTodo({
+        todoListId,
+        todoId: id,
+      }),
+    )
+  }
+
+  const handleUpdate = () => {
+    dispatch(updateTodoText({ todoListId, todoId: id, newText: currentText }))
     setEditMode(false)
   }
 
@@ -43,7 +53,7 @@ export default function TodoItem(props: Props) {
     <View style={[Layout.rowHCenter, Layout.justifyContentBetween]}>
       <View style={[Layout.rowHCenter, Layout.fill]}>
         <TouchableOpacity
-          onPress={onDelete}
+          onPress={handleDelete}
           style={[Gutters.smallHPadding, Gutters.smallVPadding]}
           disabled={editMode}
         >
@@ -96,7 +106,7 @@ export default function TodoItem(props: Props) {
         <CheckBox
           center
           checked={completed}
-          onPress={onStatusToggle}
+          onPress={handleToggle}
           style={{
             alignSelf: 'center',
             margin: 0,
@@ -105,7 +115,7 @@ export default function TodoItem(props: Props) {
         />
       ) : (
         <Pressable
-          onPress={handleUpdateText}
+          onPress={handleUpdate}
           style={{
             padding: 10,
             marginHorizontal: 5,
