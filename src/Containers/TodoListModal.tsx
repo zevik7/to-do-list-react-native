@@ -119,17 +119,7 @@ export default function TodoListModal() {
       )}
 
       {/* Add todo input */}
-      <View
-        style={[
-          {
-            position: 'absolute',
-            left: 10,
-            right: 10,
-            bottom: 10,
-          },
-          Layout.rowCenter,
-        ]}
-      >
+      <View style={[Layout.rowCenter]}>
         <TextInput
           style={[
             Common.textInput,

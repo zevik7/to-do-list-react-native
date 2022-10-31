@@ -50,7 +50,19 @@ export default function TodoItem(props: Props) {
   }
 
   return (
-    <View style={[Layout.rowHCenter, Layout.justifyContentBetween]}>
+    <View
+      style={[
+        Layout.rowHCenter,
+        Layout.justifyContentBetween,
+        
+        {
+          borderWidth: 1,
+          borderColor: 'rgb(225,225,225)',
+          borderRadius: 10,
+          backgroundColor: Colors.white
+        },
+      ]}
+    >
       <View style={[Layout.rowHCenter, Layout.fill]}>
         <TouchableOpacity
           onPress={handleDelete}
@@ -77,16 +89,18 @@ export default function TodoItem(props: Props) {
             style={[
               Layout.fill,
               Common.textInput,
-              Fonts.textRegular,
+              Fonts.textSmall,
               Fonts.textLeft,
               {
                 color: completed ? 'rgba(0,0,0,0.2)' : Colors.text,
                 borderWidth: editMode ? 1 : 0,
+                height: 35,
               },
             ]}
             onChangeText={newCurrentText => setCurrentText(newCurrentText)}
             value={currentText}
             onFocus={() => setEditMode(true)}
+            onEndEditing={handleUpdate}
           />
           {completed && !editMode && (
             <View
@@ -112,6 +126,9 @@ export default function TodoItem(props: Props) {
             margin: 0,
           }}
           checkedColor={Colors.success}
+          containerStyle={{
+            backgroundColor: 'transparent',
+          }}
         />
       ) : (
         <Pressable
@@ -124,6 +141,7 @@ export default function TodoItem(props: Props) {
           <Icon name="check" type="antdesign" />
         </Pressable>
       )}
+      <Icon name="drag-vertical" type="material-community" />
     </View>
   )
 }

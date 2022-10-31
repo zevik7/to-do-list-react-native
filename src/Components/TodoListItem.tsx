@@ -43,7 +43,6 @@ const TodoListItem = ({ id, name, todos }: Props) => {
   const dispatch = useDispatch()
   const route = useRoute()
 
-
   const totalCompletedTodos = useMemo(() => {
     return todos.reduce((prev, current) => {
       return prev + (current.completed ? 1 : 0)
@@ -112,12 +111,12 @@ const TodoListItem = ({ id, name, todos }: Props) => {
             Gutters.regularBMargin,
             Layout.rowHCenter,
             Layout.justifyContentBetween,
+            animatedStyle,
             {
               borderWidth: 1,
-              borderColor: Colors.secondary,
-              borderRadius: 5,
+              borderColor: 'rgb(220,220,220)',
+              borderRadius: 10,
             },
-            animatedStyle,
           ]}
         >
           <Text style={[Fonts.textRegular]}>{name}</Text>

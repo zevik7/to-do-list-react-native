@@ -15,7 +15,7 @@ import { CompositeNavigationProp } from '@react-navigation/native'
 import { TabStackParamList } from '@/Navigators/Main'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '@/Navigators/Application'
-import { addList } from '@/Store/TodoList'
+import TodoList, { addList } from '@/Store/TodoList'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 import { TodoListsFlatList, Brand } from '@/Components'
@@ -39,6 +39,7 @@ const HomeContainer = () => {
         todoList: {
           id: uuidv4(),
           name: listName,
+          status: 'active',
           todos: [],
         },
       }),

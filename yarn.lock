@@ -6377,6 +6377,11 @@
     "jscodeshift" "^0.13.1"
     "nullthrows" "^1.1.1"
 
+"react-native-draggable-flatlist@^3.1.2":
+  "integrity" "sha512-cqBR+lZktTqHY/J7V0aq+TZNkuqeILxwZ5bBXKndokwH4qvZl7ifijM7LlfWhfhU1/pzjketTsX7P2zyojfAaQ=="
+  "resolved" "https://registry.npmjs.org/react-native-draggable-flatlist/-/react-native-draggable-flatlist-3.1.2.tgz"
+  "version" "3.1.2"
+
 "react-native-flipper@^0.151.1":
   "integrity" "sha512-FnBvofPeqS8lhh4WohGrYWTiQ7TNjxfnfYG6nyzud2eSkHx8QX0reYduJRanotSif0yyQlG9LxJ0rHpKO7j/IQ=="
   "resolved" "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.151.1.tgz"

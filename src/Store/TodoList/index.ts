@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { store } from '..'
 
 const slice = createSlice({
   name: 'todoList',
@@ -41,15 +42,26 @@ const slice = createSlice({
     ],
   } as TodoListState,
   reducers: {
-    addList: (state, { payload: { todoList } }) => {
+    addList: (
+      state: TodoListState,
+      { payload: { todoList } }: { payload: { todoList: TodoList } },
+    ) => {
       state.todoLists.push(todoList)
     },
-    removeList: (state, { payload: { todoListId } }) => {
+    removeList: (
+      state: TodoListState,
+      { payload: { todoListId } }: { payload: { todoListId: string } },
+    ) => {
       state.todoLists = state.todoLists.filter(
-        todoList => todoListId !== todoList.id,
+        (todoList: TodoList) => todoListId !== todoList.id,
       )
     },
-    changeListStatus: (state, { payload: { todoListId, status } }) => {
+    changeListStatus: (
+      state: TodoListState,
+      {
+        payload: { todoListId, status },
+      }: { payload: { todoListId: string; status: TodoListStatus } },
+    ) => {
       for (let i = 0; i < state.todoLists.length; i++) {
         if (todoListId === state.todoLists[i].id) {
           state.todoLists[i].status = status
@@ -57,7 +69,12 @@ const slice = createSlice({
         }
       }
     },
-    addTodo: (state, { payload: { todoListId, todo } }) => {
+    addTodo: (
+      state: TodoListState,
+      {
+        payload: { todoListId, todo },
+      }: { payload: { todoListId: string; todo: Todo } },
+    ) => {
       for (let i = 0; i < state.todoLists.length; i++) {
         if (todoListId === state.todoLists[i].id) {
           state.todoLists[i].todos.push(todo)
@@ -65,7 +82,25 @@ const slice = createSlice({
         }
       }
     },
-    updateTodoText: (state, { payload: { todoListId, todoId, newText } }) => {
+    updateTodos: (
+      state: TodoListState,
+      {
+        payload: { todoListId, todos },
+      }: { payload: { todoListId: string; todos: Todo[] } },
+    ) => {
+      for (let i = 0; i < state.todoLists.length; i++) {
+        if (todoListId === state.todoLists[i].id) {
+          state.todoLists[i].todos = todos
+          break
+        }
+      }
+    },
+    updateTodoText: (
+      state: TodoListState,
+      {
+        payload: { todoListId, todoId, newText },
+      }: { payload: { todoListId: string; todoId: string; newText: string } },
+    ) => {
       for (let i = 0; i < state.todoLists.length; i++) {
         if (todoListId === state.todoLists[i].id) {
           for (let j = 0; j < state.todoLists[i].todos.length; j++) {
@@ -78,7 +113,12 @@ const slice = createSlice({
         }
       }
     },
-    deleteTodo: (state, { payload: { todoListId, todoId } }) => {
+    deleteTodo: (
+      state: TodoListState,
+      {
+        payload: { todoListId, todoId },
+      }: { payload: { todoListId: string; todoId: string } },
+    ) => {
       for (let i = 0; i < state.todoLists.length; i++) {
         if (todoListId === state.todoLists[i].id) {
           for (let j = 0; j < state.todoLists[i].todos.length; j++) {
@@ -91,7 +131,12 @@ const slice = createSlice({
         }
       }
     },
-    toggleTodo: (state, { payload: { todoListId, todoId } }) => {
+    toggleTodo: (
+      state: TodoListState,
+      {
+        payload: { todoListId, todoId },
+      }: { payload: { todoListId: string; todoId: string } },
+    ) => {
       for (let i = 0; i < state.todoLists.length; i++) {
         if (todoListId === state.todoLists[i].id) {
           for (let j = 0; j < state.todoLists[i].todos.length; j++) {
@@ -113,6 +158,7 @@ export const {
   changeListStatus,
   removeList,
   addTodo,
+  updateTodos,
   updateTodoText,
   deleteTodo,
   toggleTodo,
