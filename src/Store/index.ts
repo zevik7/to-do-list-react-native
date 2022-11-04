@@ -15,10 +15,12 @@ import {
 import { api } from '@/Services/api'
 import theme from './Theme'
 import todoLists from './TodoList'
+import lang from './Lang'
 
 const reducers = combineReducers({
   theme,
   todoLists,
+  lang,
   api: api.reducer,
 })
 

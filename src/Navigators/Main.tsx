@@ -5,6 +5,7 @@ import ArchiveContainer from '@/Containers/ArchiveContainer'
 import { HomeIcon } from '@/Components/Icons'
 import { DefaultVariables } from '@/Theme'
 import { Icon } from '@rneui/themed'
+import { translate } from '@/Translations'
 
 export type TabStackParamList = {
   Home: undefined
@@ -36,8 +37,20 @@ const MainNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeContainer} />
-      <Tab.Screen name="Archive" component={ArchiveContainer} />
+      <Tab.Screen
+        name="Home"
+        component={HomeContainer}
+        options={{
+          tabBarLabel: translate('tab_bar.home', ''),
+        }}
+      />
+      <Tab.Screen
+        name="Archive"
+        component={ArchiveContainer}
+        options={{
+          tabBarLabel: translate('tab_bar.archive', ''),
+        }}
+      />
     </Tab.Navigator>
   )
 }

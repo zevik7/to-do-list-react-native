@@ -23,6 +23,7 @@ import Reanimated, {
   runOnJS,
 } from 'react-native-reanimated'
 import { useDispatch } from 'react-redux'
+import { translate } from '@/Translations'
 
 export type TodoListItemNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, 'Home'>,
@@ -122,7 +123,7 @@ const TodoListItem = ({ id, name, todos }: Props) => {
           <Text style={[Fonts.textRegular]}>{name}</Text>
           {todos.length ? (
             <Text style={[Fonts.textSmall]}>
-              {totalCompletedTodos}/{todos.length} Completed
+              {totalCompletedTodos}/{todos.length} {translate("status.completed", "")}
             </Text>
           ) : null}
         </Reanimated.View>

@@ -1,0 +1,19 @@
+{
+  "welcome": "Chào mừng tới TodoList bởi Phu Nguyen",
+  "action": {
+    "create_list": "Thêm danh sách",
+    "add_todo": "Thêm việc",
+    "create": "Tạo"
+  },
+  "tab_bar": {
+    "home": "Trang chủ",
+    "archive": "Lưu trữ"
+  },
+  "todo_list": "Danh sách việc",
+  "create_list_title": "Tạo danh sách việc",
+  "create_list_placeholder": "Nhập tên danh sách",
+  "add_todo_placeholder": "Thêm việc",
+  "status": {
+    "completed": "Hoàn thành"
+  }
+}

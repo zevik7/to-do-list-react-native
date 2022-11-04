@@ -1,0 +1,18 @@
+{
+  "welcome": "Welcome to TodoList by Phu Nguyen",
+  "action": {
+    "create_list": "Create List",
+    "create": "Create"
+  },
+  "tab_bar": {
+    "home": "Home",
+    "archive": "Archive"
+  },
+  "todo_list": "Todo List",
+  "create_list_title": "Create Todo List",
+  "create_list_placeholder": "Enter list name",
+  "add_todo_placeholder": "Add Todo",
+  "status": {
+    "completed": "Completed"
+  }
+}

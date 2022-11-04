@@ -31,6 +31,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { TodoItem } from '@/Components'
 import { RootState } from '@/Store'
 import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
+import { translate } from '@/Translations'
 
 export type ModalScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -96,7 +97,7 @@ export default function TodoListModal() {
         </TouchableOpacity>
         {todoList?.todos.length ? (
           <Text style={[Fonts.textSmall]}>
-            {totalCompletedTodos}/{todoList?.todos.length} Completed
+            {totalCompletedTodos}/{todoList?.todos.length} {translate("status.completed", "")}
           </Text>
         ) : null}
         <TouchableOpacity onPress={navigation.goBack}>
@@ -132,7 +133,7 @@ export default function TodoListModal() {
           ]}
           onChangeText={newText => setTodoText(newText)}
           value={todoText}
-          placeholder="Add todo"
+          placeholder={translate("add_todo_placeholder", "")}
         />
         <TouchableOpacity
           style={[

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
@@ -7,19 +7,27 @@ import { useTheme } from '@/Hooks'
 import MainNavigator from './Main'
 import { navigationRef } from './utils'
 import TodoListModal from '@/Containers/TodoListModal'
+import { useSelector } from 'react-redux'
+import { setI18nConfig } from '@/Translations'
+import { RootState } from '@/Store'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
 export type RootStackParamList = {
-	Main: undefined;
-  Startup: undefined;
-	TodoListModal: { todoListId: string };
-};
+  Main: undefined
+  Startup: undefined
+  TodoListModal: { todoListId: string }
+}
 
 // @refresh reset
 const ApplicationNavigator = () => {
   const { Layout, darkMode, NavigationTheme } = useTheme()
   const { colors } = NavigationTheme
+
+  const lang = useSelector((state: RootState) => state.lang.currentLang)
+  useEffect(() => {
+    setI18nConfig(lang)
+  }, [lang])
 
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
@@ -34,10 +42,7 @@ const ApplicationNavigator = () => {
               animationEnabled: false,
             }}
           />
-          <Stack.Screen
-            name="TodoListModal"
-            component={TodoListModal}
-          />
+          <Stack.Screen name="TodoListModal" component={TodoListModal} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

@@ -18,8 +18,9 @@ import { RootStackParamList } from '@/Navigators/Application'
 import TodoList, { addList } from '@/Store/TodoList'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
-import { TodoListsFlatList, Brand } from '@/Components'
+import { TodoListsFlatList, Brand, LangSelect } from '@/Components'
 import { CloseIcon } from '@/Components/Icons'
+import { translate } from '@/Translations'
 
 export type HomeContainerNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, 'Home'>,
@@ -59,8 +60,19 @@ const HomeContainer = () => {
         Common.backgroundWhite,
       ]}
     >
+      <View
+        style={[
+          Gutters.smallBMargin,
+          {
+            width: 180,
+            alignSelf: 'flex-end',
+          },
+        ]}
+      >
+        <LangSelect />
+      </View>
       {/* Header section */}
-      <View style={[[Gutters.largeVMargin, Layout.colCenter]]}>
+      <View style={[[Gutters.largeBMargin, Layout.colCenter]]}>
         <View style={[Layout.rowCenter]}>
           <View style={[Common.divider.regular]} />
           <Text
@@ -70,7 +82,7 @@ const HomeContainer = () => {
               Fonts.titleSmall,
             ]}
           >
-            TODO LISTS
+            {translate('todo_list', '').toUpperCase()}
           </Text>
           <View style={[Common.divider.regular]} />
         </View>
@@ -86,8 +98,8 @@ const HomeContainer = () => {
           style={[Common.button.rounded]}
           onPress={() => setIsModalVisible(true)}
         >
-          <Text style={[Fonts.textRegular, { color: Colors.white }]}>
-            Add List
+          <Text style={[Fonts.textSmall, { color: Colors.white }]}>
+            {translate('action.create_list', '').toUpperCase()}
           </Text>
         </Pressable>
       </View>
@@ -130,7 +142,9 @@ const HomeContainer = () => {
               <CloseIcon />
             </TouchableOpacity>
 
-            <Text style={[Fonts.textRegular]}>Create Todo List</Text>
+            <Text style={[Fonts.textRegular]}>
+              {translate('create_list_title', '')}
+            </Text>
 
             <View style={[Gutters.regularVMargin]}>
               <TextInput
@@ -142,7 +156,7 @@ const HomeContainer = () => {
                 ]}
                 onChangeText={newListName => setListName(newListName)}
                 value={listName}
-                placeholder="Enter list name"
+                placeholder={translate('create_list_placeholder', '')}
               />
             </View>
 
@@ -157,7 +171,7 @@ const HomeContainer = () => {
                   { color: Colors.white },
                 ]}
               >
-                Create
+                {translate('action.create', '')}
               </Text>
             </Pressable>
           </View>
