@@ -1,7 +1,7 @@
-import React, { useEffect,useState } from 'react'
-import { SafeAreaView, StatusBar } from 'react-native'
+import React from 'react'
+import { SafeAreaView, StatusBar  } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { StartupContainer } from '@/Containers'
 import { useTheme } from '@/Hooks'
 import MainNavigator from './Main'
@@ -28,7 +28,7 @@ const ApplicationNavigator = () => {
   setI18nConfig(lang)
 
   return (
-    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]} key={lang}>
+    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]} >
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
         <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
         <Stack.Navigator screenOptions={{ headerShown: false }}>

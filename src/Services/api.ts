@@ -1,26 +1,41 @@
-import { Config } from '@/Config'
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
-  BaseQueryFn,
-  FetchArgs,
-  createApi,
-  fetchBaseQuery,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/query/react'
-
-const baseQuery = fetchBaseQuery({ baseUrl: Config.API_URL })
-
-const baseQueryWithInterceptor: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions)
-  if (result.error && result.error.status === 401) {
-  }
-  return result
-}
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../../firebase-config";
 
 export const api = createApi({
-  baseQuery: baseQueryWithInterceptor,
-  endpoints: () => ({}),
-})
+  reducerPath: "api",
+  baseQuery: fakeBaseQuery(),
+  endpoints: (builder) => ({
+    fetchTodoLists: builder.query({
+      async queryFn() {
+        try {
+          const userRef = collection(db, "todolist");
+          const querySnapshot = await getDocs(userRef);
+          let todoListsData: any = [];
+          querySnapshot?.forEach((todoList) => {
+            todoListsData.push({
+              id: todoList.id,
+              ...todoList.data(),
+            });
+          });
+          return { data: todoListsData };
+        } catch (err) {
+          console.log("err", err);
+          return { error: err };
+        }
+      },
+    }),
+  }),
+});
+
+export const {
+  useFetchTodoListsQuery
+} = api;
