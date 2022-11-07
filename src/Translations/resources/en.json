@@ -2,6 +2,7 @@
   "welcome": "Welcome to TodoList by Phu Nguyen",
   "action": {
     "create_list": "Create List",
+    "add_todo": "Thêm việc",
     "create": "Create"
   },
   "tab_bar": {
