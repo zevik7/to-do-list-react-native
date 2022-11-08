@@ -15,7 +15,7 @@ import { CloseIcon } from '@/Components/Icons'
 import { useState } from 'react'
 import { useTheme } from '@/Hooks'
 import { useDispatch } from 'react-redux'
-import { addTodo, Todo } from '@/Store/TodoList'
+import { Todo } from '@/Store/TodoList'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
@@ -24,6 +24,7 @@ import {
   useAddTodoMutation,
   useFetchTodoListQuery,
   useRemoveTodoListMutation,
+  useRemoveTodoMutation,
   useUpdateTodoListMutation,
 } from '@/Services/api'
 
@@ -51,7 +52,7 @@ export default function TodoListModal() {
   const handleAddTodo = () => {
     addTodo({
       todoListId,
-      text: todoText
+      text: todoText,
     })
 
     setTodoText('')
@@ -73,7 +74,7 @@ export default function TodoListModal() {
   }
 
   const totalCompletedTodos = useMemo(() => {
-    if(!data) return
+    if (!data) return
     return data?.todos?.reduce((prev: number, current: Todo) => {
       return prev + (current.completed ? 1 : 0)
     }, 0)

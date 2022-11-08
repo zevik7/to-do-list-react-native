@@ -23,9 +23,8 @@ export const api = createApi({
     fetchTodoList: builder.query<any, { id: string }>({
       async queryFn({ id }) {
         try {
-          const snapshot: TodoList = await (
-            await get(ref(db, '/todoLists/' + id))
-          ).val() || {}
+          const snapshot: TodoList =
+            (await (await get(ref(db, '/todoLists/' + id))).val()) || {}
 
           const todoListData = {
             ...snapshot,
@@ -136,6 +135,23 @@ export const api = createApi({
         return [{ type: 'TodoList', id: arg.todoListId }]
       },
     }),
+    removeTodo: builder.mutation<
+      string,
+      { todoListId: string; todoId: string }
+    >({
+      async queryFn({ todoListId, todoId }) {
+        try {
+          await remove(ref(db, `/todoLists/${todoListId}/todos/${todoId}`))
+          return { data: 'Success' }
+        } catch (error) {
+          console.log(error)
+          return { error: true }
+        }
+      },
+      invalidatesTags: (result, error, arg) => {
+        return [{ type: 'TodoList', id: arg.todoListId }]
+      },
+    }),
   }),
 })
 
@@ -146,4 +162,5 @@ export const {
   useUpdateTodoListMutation,
   useRemoveTodoListMutation,
   useAddTodoMutation,
+  useRemoveTodoMutation
 } = api

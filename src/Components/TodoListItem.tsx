@@ -10,18 +10,7 @@ import {
 import { TabStackParamList } from '@/Navigators/Main'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '@/Navigators/Application'
-import { changeListStatus, Todo } from '@/Store/TodoList'
-import {
-  PanGestureHandler,
-  PanGestureHandlerGestureEvent,
-} from 'react-native-gesture-handler'
-import Reanimated, {
-  useAnimatedStyle,
-  useSharedValue,
-  useAnimatedGestureHandler,
-  withTiming,
-  runOnJS,
-} from 'react-native-reanimated'
+import { Todo } from '@/Store/TodoList'
 import { useDispatch } from 'react-redux'
 import { translate } from '@/Translations'
 

@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   Pressable,
@@ -9,8 +8,7 @@ import React, { useState } from 'react'
 import { useTheme } from '@/Hooks'
 import { CheckBox } from '@rneui/themed'
 import { Icon } from '@rneui/themed'
-import { useDispatch } from 'react-redux'
-import { deleteTodo, toggleTodo, updateTodoText } from '@/Store/TodoList'
+import { useRemoveTodoMutation } from '@/Services/api'
 
 type Props = {
   id: string
@@ -24,28 +22,21 @@ export default function TodoItem(props: Props) {
   const { Layout, Colors, Fonts, Common, Gutters } = useTheme()
   const [currentText, setCurrentText] = useState<string>(text)
   const [editMode, setEditMode] = useState<boolean>(false)
-  const dispatch = useDispatch()
+  const [removeTodo, removeTodoResponse] = useRemoveTodoMutation()
 
   const handleToggle = () => {
-    dispatch(
-      toggleTodo({
-        todoListId,
-        todoId: id,
-      }),
-    )
+   
   }
 
   const handleDelete = () => {
-    dispatch(
-      deleteTodo({
-        todoListId,
-        todoId: id,
-      }),
-    )
+    removeTodo({
+      todoListId,
+      todoId: id,
+    })
   }
 
   const handleUpdate = () => {
-    dispatch(updateTodoText({ todoListId, todoId: id, newText: currentText }))
+    // dispatch(updateTodoText({ todoListId, todoId: id, newText: currentText }))
     setEditMode(false)
   }
 

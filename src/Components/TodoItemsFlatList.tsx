@@ -2,15 +2,13 @@ import { View } from 'react-native'
 import React, { useCallback } from 'react'
 import { useTheme } from '@/Hooks'
 import { useDispatch } from 'react-redux'
-import { Todo, updateTodos } from '@/Store/TodoList'
+import { Todo } from '@/Store/TodoList'
 import 'react-native-get-random-values'
 import { TodoItem } from '@/Components'
 import DraggableFlatList, {
   RenderItemParams,
-  ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useFetchTodoListsQuery } from '@/Services/api'
 
 type Props = {
   todoListId: string
@@ -48,9 +46,7 @@ export default function TodoItemsFlatList({ todoItems, todoListId }: Props) {
         flex: 1,
       }}
       data={todoItems}
-      onDragEnd={({ data }) =>
-        dispatch(updateTodos({ todoListId, todos: data }))
-      }
+      onDragEnd={({ data }) => {}}
       keyExtractor={item => item.id}
       renderItem={renderTodoItem}
     />
