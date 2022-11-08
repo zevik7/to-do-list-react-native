@@ -32,6 +32,7 @@ import { TodoItem } from '@/Components'
 import { RootState } from '@/Store'
 import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
 import { translate } from '@/Translations'
+import { useFetchTodoListsQuery } from '@/Services/api'
 
 export type ModalScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -47,12 +48,11 @@ export default function TodoListModal() {
   const navigation = useNavigation<ModalScreenNavigationProp>()
   const dispatch = useDispatch()
   const { Common, Colors, Fonts, Layout, Gutters } = useTheme()
-  const todoList = useSelector((state: RootState) => {
-    return state.todoLists.todoLists.find(
-      (todoList: TodoList) => todoList.id === todoListId,
-    )
-  })
   const [todoText, setTodoText] = useState<string>('')
+  const { data } = useFetchTodoListsQuery({})
+
+  const todoList =
+    data && data.find((todoList: TodoList) => todoList.id === todoListId)
 
   const handleAddTodo = () => {
     dispatch(
@@ -75,7 +75,7 @@ export default function TodoListModal() {
   }
 
   const totalCompletedTodos = useMemo(() => {
-    return todoList?.todos.reduce((prev, current) => {
+    return todoList?.todos?.reduce((prev: number, current: Todo) => {
       return prev + (current.completed ? 1 : 0)
     }, 0)
   }, [todoList?.todos])
@@ -95,9 +95,10 @@ export default function TodoListModal() {
         <TouchableOpacity onPress={handleTodoListDelete}>
           <Icon name="trash" type="evilicon" color={Colors.error} size={40} />
         </TouchableOpacity>
-        {todoList?.todos.length ? (
+        {todoList?.todos?.length ? (
           <Text style={[Fonts.textSmall]}>
-            {totalCompletedTodos}/{todoList?.todos.length} {translate("status.completed", "")}
+            {totalCompletedTodos}/{todoList?.todos.length}{' '}
+            {translate('status.completed', '')}
           </Text>
         ) : null}
         <TouchableOpacity onPress={navigation.goBack}>
@@ -133,7 +134,7 @@ export default function TodoListModal() {
           ]}
           onChangeText={newText => setTodoText(newText)}
           value={todoText}
-          placeholder={translate("add_todo_placeholder", "")}
+          placeholder={translate('add_todo_placeholder', '')}
         />
         <TouchableOpacity
           style={[

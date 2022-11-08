@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -15,12 +15,11 @@ import { CompositeNavigationProp } from '@react-navigation/native'
 import { TabStackParamList } from '@/Navigators/Main'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '@/Navigators/Application'
-import TodoList, { addList } from '@/Store/TodoList'
 import 'react-native-get-random-values'
-import { v4 as uuidv4 } from 'uuid'
 import { TodoListsFlatList, Brand, LangSelect } from '@/Components'
 import { CloseIcon } from '@/Components/Icons'
 import { translate } from '@/Translations'
+import { useAddTodoListMutation, useFetchTodoListsQuery } from '@/Services/api'
 
 export type HomeContainerNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, 'Home'>,
@@ -31,21 +30,11 @@ const HomeContainer = () => {
   const { Common, Fonts, Gutters, Layout, Colors } = useTheme()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [listName, setListName] = useState<string>('')
-  const dispatch = useDispatch()
+  const [addTodoList, { data, isSuccess }] = useAddTodoListMutation()
 
   const handleAddList = () => {
     if (!listName) return
-    dispatch(
-      addList({
-        todoList: {
-          id: uuidv4(),
-          name: listName,
-          status: 'active',
-          todos: [],
-        },
-      }),
-    )
-
+    addTodoList({ name: listName })
     setListName('')
     setIsModalVisible(false)
   }

@@ -1,16 +1,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import {
-  persistReducer,
-  persistStore,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist'
+import { persistReducer, persistStore } from 'redux-persist'
 
 import { api } from '@/Services/api'
 import theme from './Theme'

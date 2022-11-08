@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FlatList, View } from 'react-native'
 import { useTheme } from '@/Hooks'
 import { useSelector } from 'react-redux'
@@ -6,13 +6,12 @@ import { TodoList, TodoListState } from '@/Store/TodoList'
 import TodoListItem from '@/Components/TodoListItem'
 import { shallowEqual } from 'react-redux'
 import { RootState } from '@/Store'
+import { onValue, ref } from 'firebase/database'
+import { db } from '@/../firebase-config'
+import { useFetchTodoListsQuery } from '@/Services/api'
 
 const TodoListsFlatList = ({ onlyShowArchive = false }) => {
-  const todoLists: TodoList[] = useSelector((state: RootState) =>
-    state.todoLists.todoLists.filter(
-      (tl: TodoList) => tl.status === (onlyShowArchive ? 'archive' : 'active'),
-    ),
-  )
+  const { data, isLoading } = useFetchTodoListsQuery({})
 
   const { Gutters, Layout } = useTheme()
 
@@ -20,7 +19,7 @@ const TodoListsFlatList = ({ onlyShowArchive = false }) => {
     ({ item }: { item: TodoList }) => (
       <TodoListItem id={item.id} name={item.name} todos={item.todos} />
     ),
-    [todoLists],
+    [data],
   )
 
   return (
@@ -31,7 +30,7 @@ const TodoListsFlatList = ({ onlyShowArchive = false }) => {
         Gutters.smallVPadding,
         Layout.fullWidth,
       ]}
-      data={todoLists}
+      data={data}
       renderItem={renderItem}
     />
   )

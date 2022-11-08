@@ -45,7 +45,7 @@ const TodoListItem = ({ id, name, todos }: Props) => {
   const route = useRoute()
 
   const totalCompletedTodos = useMemo(() => {
-    return todos.reduce((prev, current) => {
+    return todos?.length && todos.reduce((prev, current) => {
       return prev + (current.completed ? 1 : 0)
     }, 0)
   }, [todos])
@@ -121,7 +121,7 @@ const TodoListItem = ({ id, name, todos }: Props) => {
           ]}
         >
           <Text style={[Fonts.textRegular]}>{name}</Text>
-          {todos.length ? (
+          {todos?.length ? (
             <Text style={[Fonts.textSmall]}>
               {totalCompletedTodos}/{todos.length} {translate("status.completed", "")}
             </Text>

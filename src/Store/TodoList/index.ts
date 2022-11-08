@@ -4,42 +4,7 @@ import { store } from '..'
 const slice = createSlice({
   name: 'todoList',
   initialState: {
-    todoLists: [
-      {
-        id: '1',
-        name: 'Todo list 1',
-        status: 'active',
-        todos: [
-          {
-            id: '1',
-            text: 'doing something',
-            completed: false,
-          },
-          {
-            id: '2',
-            text: 'doing something 2',
-            completed: false,
-          },
-        ],
-      },
-      {
-        id: '2',
-        name: 'Todo list 2',
-        status: 'active',
-        todos: [
-          {
-            id: '1',
-            text: 'doing something',
-            completed: false,
-          },
-          {
-            id: '2',
-            text: 'doing something 2',
-            completed: false,
-          },
-        ],
-      },
-    ],
+    todoLists: [],
   } as TodoListState,
   reducers: {
     addList: (
