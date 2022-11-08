@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native'
 import { Icon } from '@rneui/themed'
 import React, { useMemo, useCallback } from 'react'
 import {
@@ -41,12 +47,11 @@ export default function TodoListModal() {
   } = useRoute<ModalScreenRouteProp>()
 
   const navigation = useNavigation<ModalScreenNavigationProp>()
-  const dispatch = useDispatch()
   const { Common, Colors, Fonts, Layout, Gutters } = useTheme()
   const [todoText, setTodoText] = useState<string>('')
   const { data, isLoading } = useFetchTodoListQuery({ id: todoListId })
   const [removeTodoList, removeResponse] = useRemoveTodoListMutation()
-  const [updateTodoList, updateResponse] = useUpdateTodoListMutation()
+  const [updateTodoList, updateTodoResponse] = useUpdateTodoListMutation()
   const [addTodo, addTodoResponse] = useAddTodoMutation()
 
   const handleAddTodo = () => {
@@ -90,6 +95,29 @@ export default function TodoListModal() {
         Common.backgroundWhite,
       ]}
     >
+      {/* Loading View */}
+      {isLoading ||
+        removeResponse.isLoading ||
+        updateTodoResponse.isLoading ||
+        (addTodoResponse.isLoading && (
+          <View
+            style={[
+              Layout.colCenter,
+              {
+                zIndex: 1,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(255,255,255,0.5)',
+              },
+            ]}
+          >
+            <ActivityIndicator size={'large'} style={[Gutters.largeVMargin]} />
+          </View>
+        ))}
+
       {/* Header */}
       <View style={[Layout.rowCenter, Layout.justifyContentBetween]}>
         <TouchableOpacity onPress={handleTodoListDelete}>

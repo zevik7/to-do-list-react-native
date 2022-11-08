@@ -1,4 +1,4 @@
-import { Todo, TodoList, TodoListStatus } from '@/Store/TodoList'
+import { Todo, TodoList } from '@/Store/TodoList'
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
   onValue,
@@ -152,6 +152,26 @@ export const api = createApi({
         return [{ type: 'TodoList', id: arg.todoListId }]
       },
     }),
+    updateTodo: builder.mutation<
+      string,
+      { todoListId: string; todoId: string; data: any }
+    >({
+      async queryFn({ todoListId, todoId, data }) {
+        try {
+          await update(ref(db, `/todoLists/${todoListId}/todos/${todoId}`), {
+            ...data,
+          })
+          return { data: 'Success' }
+        } catch (error) {
+          console.log(error)
+          return { error: true }
+        }
+      },
+      invalidatesTags: (result, error, arg) => {
+        return [{ type: 'TodoList', id: arg.todoListId }]
+      },
+    }),
+    
   }),
 })
 
@@ -162,5 +182,6 @@ export const {
   useUpdateTodoListMutation,
   useRemoveTodoListMutation,
   useAddTodoMutation,
-  useRemoveTodoMutation
+  useRemoveTodoMutation,
+  useUpdateTodoMutation
 } = api

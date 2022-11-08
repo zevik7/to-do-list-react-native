@@ -17,7 +17,6 @@ type Props = {
 
 export default function TodoItemsFlatList({ todoItems, todoListId }: Props) {
   const { Layout, Gutters } = useTheme()
-  const dispatch = useDispatch()
 
   const renderTodoItem = useCallback(
     ({ item, drag }: RenderItemParams<any>) => (

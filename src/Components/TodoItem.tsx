@@ -1,14 +1,9 @@
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-} from 'react-native'
+import { View, TextInput, TouchableOpacity, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '@/Hooks'
 import { CheckBox } from '@rneui/themed'
 import { Icon } from '@rneui/themed'
-import { useRemoveTodoMutation } from '@/Services/api'
+import { useRemoveTodoMutation, useUpdateTodoMutation } from '@/Services/api'
 
 type Props = {
   id: string
@@ -23,9 +18,10 @@ export default function TodoItem(props: Props) {
   const [currentText, setCurrentText] = useState<string>(text)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [removeTodo, removeTodoResponse] = useRemoveTodoMutation()
+  const [updateTodo, updateTodoResponse] = useUpdateTodoMutation()
 
-  const handleToggle = () => {
-   
+  const handleToggle = async () => {
+    await updateTodo({ todoListId, todoId: id, data: { completed: !completed } })
   }
 
   const handleDelete = () => {
@@ -36,7 +32,7 @@ export default function TodoItem(props: Props) {
   }
 
   const handleUpdate = () => {
-    // dispatch(updateTodoText({ todoListId, todoId: id, newText: currentText }))
+    updateTodo({ todoListId, todoId: id, data: { text: currentText } })
     setEditMode(false)
   }
 
@@ -45,12 +41,12 @@ export default function TodoItem(props: Props) {
       style={[
         Layout.rowHCenter,
         Layout.justifyContentBetween,
-        
+
         {
           borderWidth: 1,
           borderColor: 'rgb(225,225,225)',
           borderRadius: 10,
-          backgroundColor: Colors.white
+          backgroundColor: Colors.white,
         },
       ]}
     >
