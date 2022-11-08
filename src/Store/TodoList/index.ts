@@ -7,12 +7,6 @@ const slice = createSlice({
     todoLists: [],
   } as TodoListState,
   reducers: {
-    addList: (
-      state: TodoListState,
-      { payload: { todoList } }: { payload: { todoList: TodoList } },
-    ) => {
-      state.todoLists.push(todoList)
-    },
     removeList: (
       state: TodoListState,
       { payload: { todoListId } }: { payload: { todoListId: string } },

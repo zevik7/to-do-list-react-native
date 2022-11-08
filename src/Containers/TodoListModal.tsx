@@ -32,7 +32,11 @@ import { TodoItem } from '@/Components'
 import { RootState } from '@/Store'
 import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
 import { translate } from '@/Translations'
-import { useFetchTodoListsQuery } from '@/Services/api'
+import {
+  useFetchTodoListQuery,
+  useFetchTodoListsQuery,
+  useRemoveTodoListMutation,
+} from '@/Services/api'
 
 export type ModalScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -49,10 +53,8 @@ export default function TodoListModal() {
   const dispatch = useDispatch()
   const { Common, Colors, Fonts, Layout, Gutters } = useTheme()
   const [todoText, setTodoText] = useState<string>('')
-  const { data } = useFetchTodoListsQuery({})
-
-  const todoList =
-    data && data.find((todoList: TodoList) => todoList.id === todoListId)
+  const { data, isLoading } = useFetchTodoListQuery({ id: todoListId })
+  const [removeTodoList, removeData] = useRemoveTodoListMutation()
 
   const handleAddTodo = () => {
     dispatch(
@@ -70,15 +72,15 @@ export default function TodoListModal() {
   }
 
   const handleTodoListDelete = () => {
-    dispatch(removeList({ todoListId }))
+    removeTodoList({ id: todoListId })
     navigation.goBack()
   }
 
   const totalCompletedTodos = useMemo(() => {
-    return todoList?.todos?.reduce((prev: number, current: Todo) => {
+    return data?.todos?.reduce((prev: number, current: Todo) => {
       return prev + (current.completed ? 1 : 0)
     }, 0)
-  }, [todoList?.todos])
+  }, [data?.todos])
 
   return (
     <View
@@ -95,9 +97,9 @@ export default function TodoListModal() {
         <TouchableOpacity onPress={handleTodoListDelete}>
           <Icon name="trash" type="evilicon" color={Colors.error} size={40} />
         </TouchableOpacity>
-        {todoList?.todos?.length ? (
+        {data?.todos?.length ? (
           <Text style={[Fonts.textSmall]}>
-            {totalCompletedTodos}/{todoList?.todos.length}{' '}
+            {totalCompletedTodos}/{data.todos.length}{' '}
             {translate('status.completed', '')}
           </Text>
         ) : null}
@@ -107,17 +109,28 @@ export default function TodoListModal() {
       </View>
 
       {/* List's name */}
-      <Text style={[Gutters.largeTMargin, Fonts.textCenter, Fonts.textRegular]}>
-        {todoList?.name}
-      </Text>
+      <View
+        style={[
+          Gutters.largeTMargin,
+          Layout.rowCenter,
+          Layout.justifyContentBetween,
+        ]}
+      >
+        <Text style={[Fonts.textCenter, Fonts.textRegular]}>
+          {data?.name}
+        </Text>
+        <TouchableOpacity onPress={handleTodoListDelete}>
+          <Icon name="archive" color={Colors.primary} size={30} />
+        </TouchableOpacity>
+      </View>
 
       <View style={[Gutters.smallTMargin, Layout.fullWidth, Layout.row]}>
         <View style={[Common.divider.regular]} />
       </View>
 
       {/* Todo items list*/}
-      {todoList?.todos && (
-        <TodoItemsFlatList todoItems={todoList.todos} todoListId={todoListId} />
+      {data?.todos && (
+        <TodoItemsFlatList todoItems={data.todos} todoListId={todoListId} />
       )}
 
       {/* Add todo input */}
