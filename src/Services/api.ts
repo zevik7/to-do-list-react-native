@@ -1,4 +1,4 @@
-import { TodoList, TodoListStatus } from '@/Store/TodoList'
+import { Todo, TodoList, TodoListStatus } from '@/Store/TodoList'
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
   onValue,
@@ -18,15 +18,27 @@ import { v4 as uuidv4 } from 'uuid'
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fakeBaseQuery(),
-  tagTypes: ['TodoLists', 'TodoList'],
+  tagTypes: ['TodoLists', 'TodoList', 'Todo'],
   endpoints: builder => ({
-    fetchTodoList: builder.query<TodoList, { id: string }>({
+    fetchTodoList: builder.query<any, { id: string }>({
       async queryFn({ id }) {
-        const todoListData: TodoList = await (
-          await get(ref(db, '/todoLists/' + id))
-        ).val()
+        try {
+          const snapshot: TodoList = await (
+            await get(ref(db, '/todoLists/' + id))
+          ).val() || {}
 
-        return { data: todoListData }
+          const todoListData = {
+            ...snapshot,
+            todos: Object.keys(snapshot.todos || {}).map(
+              (key: any) => snapshot.todos[key],
+            ),
+          }
+
+          return { data: todoListData }
+        } catch (error) {
+          console.log(error)
+          return { data: '' }
+        }
       },
       providesTags: (result, error, arg) => [{ type: 'TodoList', id: arg.id }],
     }),
@@ -104,6 +116,26 @@ export const api = createApi({
       },
       invalidatesTags: ['TodoLists'],
     }),
+    addTodo: builder.mutation<string, { todoListId: string; text: string }>({
+      async queryFn({ todoListId, text }) {
+        try {
+          const id = uuidv4()
+          const newTodo: Todo = {
+            id,
+            text,
+            completed: false,
+          }
+          await set(ref(db, `/todoLists/${todoListId}/todos/${id}`), newTodo)
+          return { data: 'Success' }
+        } catch (error) {
+          console.log(error)
+          return { error: true }
+        }
+      },
+      invalidatesTags: (result, error, arg) => {
+        return [{ type: 'TodoList', id: arg.todoListId }]
+      },
+    }),
   }),
 })
 
@@ -113,4 +145,5 @@ export const {
   useAddTodoListMutation,
   useUpdateTodoListMutation,
   useRemoveTodoListMutation,
+  useAddTodoMutation,
 } = api

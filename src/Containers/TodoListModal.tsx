@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from 'uuid'
 import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
 import { translate } from '@/Translations'
 import {
+  useAddTodoMutation,
   useFetchTodoListQuery,
   useRemoveTodoListMutation,
   useUpdateTodoListMutation,
@@ -45,18 +46,13 @@ export default function TodoListModal() {
   const { data, isLoading } = useFetchTodoListQuery({ id: todoListId })
   const [removeTodoList, removeResponse] = useRemoveTodoListMutation()
   const [updateTodoList, updateResponse] = useUpdateTodoListMutation()
+  const [addTodo, addTodoResponse] = useAddTodoMutation()
 
   const handleAddTodo = () => {
-    dispatch(
-      addTodo({
-        todoListId: todoListId,
-        todo: {
-          id: uuidv4(),
-          text: todoText,
-          completed: false,
-        } as Todo,
-      }),
-    )
+    addTodo({
+      todoListId,
+      text: todoText
+    })
 
     setTodoText('')
   }
@@ -77,10 +73,11 @@ export default function TodoListModal() {
   }
 
   const totalCompletedTodos = useMemo(() => {
+    if(!data) return
     return data?.todos?.reduce((prev: number, current: Todo) => {
       return prev + (current.completed ? 1 : 0)
     }, 0)
-  }, [data?.todos])
+  }, [data])
 
   return (
     <View
