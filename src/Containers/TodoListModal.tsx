@@ -15,27 +15,15 @@ import { CloseIcon } from '@/Components/Icons'
 import { useState } from 'react'
 import { useTheme } from '@/Hooks'
 import { useDispatch } from 'react-redux'
-import {
-  addList,
-  addTodo,
-  deleteTodo,
-  toggleTodo,
-  Todo,
-  TodoList,
-  updateTodoText,
-  removeList,
-} from '@/Store/TodoList'
-import { useSelector } from 'react-redux'
+import { addTodo, Todo } from '@/Store/TodoList'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
-import { TodoItem } from '@/Components'
-import { RootState } from '@/Store'
 import TodoItemsFlatList from '@/Components/TodoItemsFlatList'
 import { translate } from '@/Translations'
 import {
   useFetchTodoListQuery,
-  useFetchTodoListsQuery,
   useRemoveTodoListMutation,
+  useUpdateTodoListMutation,
 } from '@/Services/api'
 
 export type ModalScreenNavigationProp = CompositeNavigationProp<
@@ -49,12 +37,14 @@ export default function TodoListModal() {
   const {
     params: { todoListId },
   } = useRoute<ModalScreenRouteProp>()
+
   const navigation = useNavigation<ModalScreenNavigationProp>()
   const dispatch = useDispatch()
   const { Common, Colors, Fonts, Layout, Gutters } = useTheme()
   const [todoText, setTodoText] = useState<string>('')
   const { data, isLoading } = useFetchTodoListQuery({ id: todoListId })
-  const [removeTodoList, removeData] = useRemoveTodoListMutation()
+  const [removeTodoList, removeResponse] = useRemoveTodoListMutation()
+  const [updateTodoList, updateResponse] = useUpdateTodoListMutation()
 
   const handleAddTodo = () => {
     dispatch(
@@ -71,8 +61,18 @@ export default function TodoListModal() {
     setTodoText('')
   }
 
-  const handleTodoListDelete = () => {
-    removeTodoList({ id: todoListId })
+  const handleTodoListDelete = async () => {
+    await removeTodoList({ id: todoListId })
+    navigation.goBack()
+  }
+
+  const handleTodoListArchive = async () => {
+    await updateTodoList({
+      id: todoListId,
+      data: {
+        status: data?.status === 'active' ? 'archive' : 'active',
+      },
+    })
     navigation.goBack()
   }
 
@@ -116,11 +116,13 @@ export default function TodoListModal() {
           Layout.justifyContentBetween,
         ]}
       >
-        <Text style={[Fonts.textCenter, Fonts.textRegular]}>
-          {data?.name}
-        </Text>
-        <TouchableOpacity onPress={handleTodoListDelete}>
-          <Icon name="archive" color={Colors.primary} size={30} />
+        <Text style={[Fonts.textCenter, Fonts.textRegular]}>{data?.name}</Text>
+        <TouchableOpacity onPress={handleTodoListArchive}>
+          <Icon
+            name={data?.status === 'active' ? 'archive' : 'unarchive'}
+            color={Colors.primary}
+            size={30}
+          />
         </TouchableOpacity>
       </View>
 

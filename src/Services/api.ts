@@ -1,6 +1,17 @@
-import { TodoList } from '@/Store/TodoList'
+import { TodoList, TodoListStatus } from '@/Store/TodoList'
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
-import { onValue, ref, get, set, push, remove } from 'firebase/database'
+import {
+  onValue,
+  ref,
+  get,
+  set,
+  push,
+  remove,
+  update,
+  equalTo,
+  query,
+  orderByChild,
+} from 'firebase/database'
 import { db } from '../../firebase-config'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -17,20 +28,50 @@ export const api = createApi({
 
         return { data: todoListData }
       },
-      providesTags: ['TodoLists'],
+      providesTags: (result, error, arg) => [{ type: 'TodoList', id: arg.id }],
     }),
-    fetchTodoLists: builder.query<TodoList[], { onlyArchive: boolean }>({
-      async queryFn({ onlyArchive }) {
-        const snapshot: any = await (await get(ref(db, '/todoLists'))).val()
-        const todoListsData: TodoList[] = Object.keys(snapshot).map(
-          (key: string) => ({
-            ...snapshot[key],
-          }),
-        )
+    fetchTodoLists: builder.query<any, any>({
+      async queryFn({ status = 'active' }) {
+        try {
+          const snapshot: TodoList[] =
+            (await (
+              await get(
+                query(
+                  ref(db, '/todoLists'),
+                  orderByChild('status'),
+                  equalTo(status),
+                ),
+              )
+            ).val()) || {}
+          let todoListsData: TodoList[] = Object.keys(snapshot).map(
+            (key: any) => ({
+              ...snapshot[key],
+            }),
+          )
 
-        return { data: todoListsData }
+          return { data: todoListsData }
+        } catch (error) {
+          console.log(error)
+          return { data: '' }
+        }
       },
       providesTags: ['TodoLists'],
+    }),
+    updateTodoList: builder.mutation<string, { id: string; data: any }>({
+      async queryFn({ id, data }) {
+        try {
+          await update(ref(db, '/todoLists/' + id), {
+            ...data,
+          })
+          return { data: 'Success' }
+        } catch (error) {
+          console.log(error)
+          return { error: true }
+        }
+      },
+      invalidatesTags: (result, error, arg) => {
+        return ['TodoLists', { type: 'TodoList', id: arg.id }]
+      },
     }),
     addTodoList: builder.mutation<string, { name: string }>({
       async queryFn({ name }) {
@@ -70,5 +111,6 @@ export const {
   useFetchTodoListQuery,
   useFetchTodoListsQuery,
   useAddTodoListMutation,
+  useUpdateTodoListMutation,
   useRemoveTodoListMutation,
 } = api

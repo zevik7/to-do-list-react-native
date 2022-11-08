@@ -28,7 +28,7 @@ const ApplicationNavigator = () => {
   setI18nConfig(lang)
 
   return (
-    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]} >
+    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]} key={lang} >
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
         <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
         <Stack.Navigator screenOptions={{ headerShown: false }}>

@@ -10,8 +10,14 @@ import { onValue, ref } from 'firebase/database'
 import { db } from '@/../firebase-config'
 import { useFetchTodoListsQuery } from '@/Services/api'
 
-const TodoListsFlatList = ({ onlyShowArchive = false }) => {
-  const { data, isLoading } = useFetchTodoListsQuery({})
+type Props = {
+  onlyShowArchive: boolean
+}
+
+const TodoListsFlatList = ({ onlyShowArchive = false }: Props) => {
+  const { data, isLoading } = useFetchTodoListsQuery({
+    status: onlyShowArchive ? 'archive' : 'active',
+  })
 
   const { Gutters, Layout } = useTheme()
 
