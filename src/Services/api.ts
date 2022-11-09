@@ -1,11 +1,9 @@
 import { Todo, TodoList } from '@/Store/TodoList'
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
-  onValue,
   ref,
   get,
   set,
-  push,
   remove,
   update,
   equalTo,
@@ -23,7 +21,7 @@ export const api = createApi({
     fetchTodoList: builder.query<any, { id: string }>({
       async queryFn({ id }) {
         try {
-          const snapshot: TodoList =
+          const snapshot =
             (await (await get(ref(db, '/todoLists/' + id))).val()) || {}
 
           const todoListData = {
@@ -44,17 +42,15 @@ export const api = createApi({
     fetchTodoLists: builder.query<any, any>({
       async queryFn({ status = 'active' }) {
         try {
-          const snapshot: TodoList[] =
-            (await (
-              await get(
-                query(
-                  ref(db, '/todoLists'),
-                  orderByChild('status'),
-                  equalTo(status),
-                ),
-              )
-            ).val()) || {}
-          let todoListsData: TodoList[] = Object.keys(snapshot).map(
+          const fetchRef = query(
+            ref(db, 'todoLists/'),
+            orderByChild('status'),
+            equalTo(status),
+          )
+
+          const snapshot = await (await get(fetchRef)).val()
+
+          let todoListsData: TodoList[] = Object.keys(snapshot || {}).map(
             (key: any) => ({
               ...snapshot[key],
             }),
@@ -171,7 +167,6 @@ export const api = createApi({
         return [{ type: 'TodoList', id: arg.todoListId }]
       },
     }),
-    
   }),
 })
 
@@ -183,5 +178,5 @@ export const {
   useRemoveTodoListMutation,
   useAddTodoMutation,
   useRemoveTodoMutation,
-  useUpdateTodoMutation
+  useUpdateTodoMutation,
 } = api
